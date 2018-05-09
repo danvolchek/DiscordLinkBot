@@ -1,5 +1,5 @@
-﻿using DSharpPlus.Entities;
-using System.Data.SQLite;
+﻿using System.Data.SQLite;
+using DSharpPlus.Entities;
 
 namespace DiscordLinkBot.Commands
 {
@@ -15,7 +15,8 @@ namespace DiscordLinkBot.Commands
 
         public override string Name => "lookup";
 
-        public override string HelpText => $"Replies with a premade message.\nUsage: `{Program.CommandChar}<name> [mentioned user]`.";
+        public override string HelpText =>
+            $"Replies with a premade message.\nUsage: `{Program.CommandChar}<name> [mentioned user]`.";
 
         public override bool CanHandle(DiscordMessage message)
         {
@@ -30,14 +31,14 @@ namespace DiscordLinkBot.Commands
                     if (!args[0].StartsWith(Program.CommandChar))
                         return false;
 
-                    SQLiteCommand command = new SQLiteCommand("SELECT message FROM commands WHERE name=@name;", this.Connection);
+                    SQLiteCommand command = new SQLiteCommand("SELECT message FROM commands WHERE name=@name;",
+                        this.Connection);
                     command.Parameters.AddWithValue("@name", args[0].Substring(1).ToLowerInvariant());
 
-                    return (this.lastLookedUpMessage = (string)command.ExecuteScalar()) != null;
+                    return (this.lastLookedUpMessage = (string) command.ExecuteScalar()) != null;
                 default:
                     return false;
             }
-
         }
 
         public override string Handle(DiscordMessage message)

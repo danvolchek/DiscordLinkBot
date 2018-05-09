@@ -1,6 +1,6 @@
-﻿using DSharpPlus.Entities;
-using System.Data.SQLite;
+﻿using System.Data.SQLite;
 using System.Linq;
+using DSharpPlus.Entities;
 
 namespace DiscordLinkBot.Commands
 {
@@ -14,7 +14,8 @@ namespace DiscordLinkBot.Commands
 
         public override string Name => "list";
 
-        public override string HelpText => $"Lists all command names.\nUsage: `{Program.CommandChar}list [page number]`.";
+        public override string HelpText =>
+            $"Lists all command names.\nUsage: `{Program.CommandChar}list [page number]`.";
 
         public override string Handle(DiscordMessage message)
         {
@@ -35,16 +36,14 @@ namespace DiscordLinkBot.Commands
                     return null;
             }
 
-            SQLiteCommand command = new SQLiteCommand("SELECT name FROM commands LIMIT 10 OFFSET @offset;", this.Connection);
+            SQLiteCommand command =
+                new SQLiteCommand("SELECT name FROM commands LIMIT 10 OFFSET @offset;", this.Connection);
             command.Parameters.AddWithValue("@offset", offset);
 
             string result = "Commands: ";
             using (SQLiteDataReader reader = command.ExecuteReader())
             {
-                while (reader.Read())
-                {
-                    result += $"{reader.GetString(0)}, ";
-                }
+                while (reader.Read()) result += $"{reader.GetString(0)}, ";
             }
 
             return result;

@@ -1,5 +1,5 @@
-﻿using DSharpPlus.Entities;
-using System.Data.SQLite;
+﻿using System.Data.SQLite;
+using DSharpPlus.Entities;
 
 namespace DiscordLinkBot.Commands
 {

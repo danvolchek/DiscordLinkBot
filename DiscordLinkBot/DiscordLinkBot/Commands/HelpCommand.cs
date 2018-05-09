@@ -1,6 +1,6 @@
-﻿using DSharpPlus.Entities;
-using System.Data.SQLite;
+﻿using System.Data.SQLite;
 using System.Linq;
+using DSharpPlus.Entities;
 
 namespace DiscordLinkBot.Commands
 {
@@ -26,7 +26,8 @@ namespace DiscordLinkBot.Commands
             switch (args.Length)
             {
                 case 0:
-                    return $"Available commands:\n{string.Join(", ", this.manager.GetCommandNames())}\nUse `{Program.CommandChar}{this.Name} <name>` to see more info!";
+                    return
+                        $"Available commands:\n{string.Join(", ", this.manager.GetCommandNames())}\nUse `{Program.CommandChar}{this.Name} <name>` to see more info!";
                 case 1:
                     return this.manager.GetCommandHelpString(args[0]) ?? "That command name doesn't exist!";
                 default:

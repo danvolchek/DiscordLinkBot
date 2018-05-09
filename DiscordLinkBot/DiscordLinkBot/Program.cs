@@ -1,21 +1,32 @@
-﻿using DSharpPlus;
-using DSharpPlus.EventArgs;
-using DiscordLinkBot.Commands;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using DiscordLinkBot.Commands;
+using DSharpPlus;
+using DSharpPlus.EventArgs;
 
 namespace DiscordLinkBot
 {
     internal class Program : ICommandManager
     {
-        private DiscordClient discord;
-        private SQLiteConnection connection;
-        private IList<ICommandHandler> commandHandlers;
-
         internal const char CommandChar = '!';
+        private IList<ICommandHandler> commandHandlers;
+        private SQLiteConnection connection;
+        private DiscordClient discord;
+
+        public string GetCommandHelpString(string name)
+        {
+            name = name.ToLowerInvariant();
+            return this.commandHandlers.FirstOrDefault(handler => handler.Name == name)?.HelpText;
+        }
+
+        public IEnumerable<string> GetCommandNames()
+        {
+            return this.commandHandlers.Select(handler => handler.Name);
+        }
 
         private static void Main(string[] args)
         {
@@ -30,7 +41,9 @@ namespace DiscordLinkBot
             Console.WriteLine("Okay!");
 
             Console.Write("Creating table... ");
-            SQLiteCommand command = new SQLiteCommand("SELECT name FROM sqlite_master WHERE type='table' AND name='commands';", this.connection);
+            SQLiteCommand command =
+                new SQLiteCommand("SELECT name FROM sqlite_master WHERE type='table' AND name='commands';",
+                    this.connection);
             if (command.ExecuteScalar() == null)
             {
                 command.CommandText = "CREATE TABLE commands(name TEXT PRIMARY KEY, message TEXT);";
@@ -38,10 +51,12 @@ namespace DiscordLinkBot
                 Console.WriteLine("Okay!");
             }
             else
+            {
                 Console.WriteLine("Already exists!");
+            }
 
             Console.Write("Adding handlers... ");
-            this.commandHandlers = new List<ICommandHandler>()
+            this.commandHandlers = new List<ICommandHandler>
             {
                 new DefineCommand(this.connection),
                 new RedefineCommand(this.connection),
@@ -55,7 +70,7 @@ namespace DiscordLinkBot
             Console.Write("Connecting to discord... ");
             this.discord = new DiscordClient(new DiscordConfiguration
             {
-                Token = System.IO.File.ReadAllText("credentials.txt"),
+                Token = File.ReadAllText("credentials.txt"),
                 TokenType = TokenType.Bot
             });
 
@@ -77,8 +92,8 @@ namespace DiscordLinkBot
             if (e.Message.Author.IsBot)
                 return;
 
-            bool isAdmin = e.Guild.Members.FirstOrDefault(member => member.Id == e.Author.Id).Roles
-                .Any(role => role.Name.ToLowerInvariant().StartsWith("admin"));
+            bool isAdmin = e.Guild.Members.FirstOrDefault(member => member.Id == e.Author.Id)?.Roles
+                               .Any(role => role.Name.ToLowerInvariant().StartsWith("admin")) ?? false;
 
             ICommandHandler commandHandler = this.commandHandlers.FirstOrDefault(handler =>
                 (!handler.IsAdminOnlyCommand || isAdmin) && handler.CanHandle(e.Message));
@@ -87,17 +102,5 @@ namespace DiscordLinkBot
             if (result != null)
                 await e.Message.RespondAsync(result);
         }
-
-        public string GetCommandHelpString(string name)
-        {
-            name = name.ToLowerInvariant();
-            return this.commandHandlers.FirstOrDefault(handler => handler.Name == name)?.HelpText;
-        }
-
-        public IEnumerable<string> GetCommandNames()
-        {
-            return this.commandHandlers.Select(handler => handler.Name);
-        }
-
     }
 }
