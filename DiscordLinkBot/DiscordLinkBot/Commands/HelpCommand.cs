@@ -4,11 +4,14 @@ using DSharpPlus.Entities;
 
 namespace DiscordLinkBot.Commands
 {
-    internal class HelpCommand : DatabaseCommand
+    /// <summary>
+    /// Command to get help about other commands.
+    /// </summary>
+    internal class HelpCommand : BaseCommand
     {
         private readonly ICommandManager manager;
 
-        public HelpCommand(SQLiteConnection connection, ICommandManager manager) : base(connection)
+        public HelpCommand(ICommandManager manager)
         {
             this.manager = manager;
         }
@@ -29,7 +32,7 @@ namespace DiscordLinkBot.Commands
                     return
                         $"Available commands:\n{string.Join(", ", this.manager.GetCommandNames())}\nUse `{Program.CommandChar}{this.Name} <name>` to see more info!";
                 case 1:
-                    return this.manager.GetCommandHelpString(args[0]) ?? "That command name doesn't exist!";
+                    return this.manager.GetCommandHelpString(args[0].ToLowerInvariant()) ?? "That command name doesn't exist!";
                 default:
                     return $"Invalid args. See `{Program.CommandChar}help {this.Name} for usage`.";
             }

@@ -4,6 +4,9 @@ using DSharpPlus.Entities;
 
 namespace DiscordLinkBot.Commands
 {
+    /// <summary>
+    /// Command to list all commands.
+    /// </summary>
     internal class ListAllCommand : DatabaseCommand
     {
         public ListAllCommand(SQLiteConnection connection) : base(connection)
@@ -30,8 +33,6 @@ namespace DiscordLinkBot.Commands
                 case 1 when int.TryParse(args[0], out int pageNumber):
                     offset = 10 * pageNumber;
                     break;
-                case 1:
-                    return null;
                 default:
                     return null;
             }

@@ -4,6 +4,9 @@ using DSharpPlus.Entities;
 
 namespace DiscordLinkBot.Commands
 {
+    /// <summary>
+    /// Command to redefine existing commands.
+    /// </summary>
     internal class RedefineCommand : DatabaseCommand
     {
         public RedefineCommand(SQLiteConnection connection) : base(connection)
@@ -31,7 +34,7 @@ namespace DiscordLinkBot.Commands
                 default:
                     SQLiteCommand command =
                         new SQLiteCommand("SELECT name FROM commands WHERE name=@name;", this.Connection);
-                    command.Parameters.AddWithValue("@name", args[0]);
+                    command.Parameters.AddWithValue("@name", args[0].ToLowerInvariant());
                     if (command.ExecuteScalar() == null)
                         return $"That command doesn't exist! Use `{Program.CommandChar}define` to define it.";
 

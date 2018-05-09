@@ -4,10 +4,16 @@ using DSharpPlus.Entities;
 
 namespace DiscordLinkBot.Commands
 {
+    /// <summary>
+    /// Command to define new commands.
+    /// </summary>
     internal class DefineCommand : DatabaseCommand
     {
-        public DefineCommand(SQLiteConnection connection) : base(connection)
+        private readonly ICommandManager manager;
+
+        public DefineCommand(SQLiteConnection connection, ICommandManager manager) : base(connection)
         {
+            this.manager = manager;
         }
 
         public override bool IsAdminOnlyCommand => true;
@@ -28,10 +34,16 @@ namespace DiscordLinkBot.Commands
                 case 1:
                     return "You need to provide a message for this command!";
                 default:
+                    string commandName = args[0].ToLowerInvariant();
+
                     SQLiteCommand command =
                         new SQLiteCommand("SELECT name FROM commands WHERE name=@name;", this.Connection);
-                    command.Parameters.AddWithValue("@name", args[0]);
+                    command.Parameters.AddWithValue("@name", commandName);
+
                     if (command.ExecuteScalar() != null) return "That command already exists!";
+
+                    if (this.manager.GetCommandNames().Any(name => name == commandName))
+                        return $"{args[0]} is a reserved name, please use a different name!";
 
                     command.CommandText = "INSERT INTO commands VALUES (@name, @message);";
                     command.Parameters.AddWithValue("@message", string.Join(" ", args.Skip(1)));

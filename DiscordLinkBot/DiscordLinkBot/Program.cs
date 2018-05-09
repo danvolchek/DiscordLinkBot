@@ -13,26 +13,39 @@ namespace DiscordLinkBot
     internal class Program : ICommandManager
     {
         internal const char CommandChar = '!';
-        private IList<ICommandHandler> commandHandlers;
+        private IList<ICommand> commands;
         private SQLiteConnection connection;
         private DiscordClient discord;
 
+        /// <summary>
+        /// Get the <see cref="ICommand.HelpText"/> for a given command name that this manager manages.
+        /// </summary>
         public string GetCommandHelpString(string name)
         {
             name = name.ToLowerInvariant();
-            return this.commandHandlers.FirstOrDefault(handler => handler.Name == name)?.HelpText;
+            return this.commands.FirstOrDefault(handler => handler.Name == name)?.HelpText;
         }
 
+        /// <summary>
+        /// Get all command names that this manager manages.
+        /// </summary>
         public IEnumerable<string> GetCommandNames()
         {
-            return this.commandHandlers.Select(handler => handler.Name);
+            return this.commands.Select(handler => handler.Name);
         }
 
+        /// <summary>
+        /// Program entry point. Starts the <see cref="MainAsync"/> task.
+        /// </summary>
+        /// <param name="args"></param>
         private static void Main(string[] args)
         {
             new Program().MainAsync(args).ConfigureAwait(false).GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// Main task. Sets up the DB, commands, and then connects to discord.
+        /// </summary>
         private async Task MainAsync(string[] args)
         {
             Console.Write("Opening connection... ");
@@ -56,13 +69,13 @@ namespace DiscordLinkBot
             }
 
             Console.Write("Adding handlers... ");
-            this.commandHandlers = new List<ICommandHandler>
+            this.commands = new List<ICommand>
             {
-                new DefineCommand(this.connection),
+                new DefineCommand(this.connection, this),
                 new RedefineCommand(this.connection),
                 new DeleteCommand(this.connection),
                 new ListAllCommand(this.connection),
-                new HelpCommand(this.connection, this),
+                new HelpCommand(this),
                 new LookupCommand(this.connection)
             };
             Console.WriteLine("Okay!");
@@ -87,6 +100,9 @@ namespace DiscordLinkBot
             Console.WriteLine("Okay!");
         }
 
+        /// <summary>
+        /// Event handler for new messages. Handles the message using a <see cref="ICommand"/>.
+        /// </summary>
         private async Task Discord_MessageCreated(MessageCreateEventArgs e)
         {
             if (e.Message.Author.IsBot)
@@ -95,10 +111,10 @@ namespace DiscordLinkBot
             bool isAdmin = e.Guild.Members.FirstOrDefault(member => member.Id == e.Author.Id)?.Roles
                                .Any(role => role.Name.ToLowerInvariant().StartsWith("admin")) ?? false;
 
-            ICommandHandler commandHandler = this.commandHandlers.FirstOrDefault(handler =>
+            ICommand command = this.commands.FirstOrDefault(handler =>
                 (!handler.IsAdminOnlyCommand || isAdmin) && handler.CanHandle(e.Message));
 
-            string result = commandHandler?.Handle(e.Message);
+            string result = command?.Handle(e.Message);
             if (result != null)
                 await e.Message.RespondAsync(result);
         }

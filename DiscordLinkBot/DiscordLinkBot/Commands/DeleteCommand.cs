@@ -4,6 +4,9 @@ using DSharpPlus.Entities;
 
 namespace DiscordLinkBot.Commands
 {
+    /// <summary>
+    /// Command to delete existing commands.
+    /// </summary>
     internal class DeleteCommand : DatabaseCommand
     {
         public DeleteCommand(SQLiteConnection connection) : base(connection)
@@ -28,7 +31,7 @@ namespace DiscordLinkBot.Commands
                 case 1:
                     SQLiteCommand command =
                         new SQLiteCommand("SELECT name FROM commands WHERE name=@name;", this.Connection);
-                    command.Parameters.AddWithValue("@name", args[0]);
+                    command.Parameters.AddWithValue("@name", args[0].ToLowerInvariant());
                     if (command.ExecuteScalar() == null) return "That command doesn't exist!";
 
                     command.CommandText = "DELETE FROM commands WHERE name=@name;";
