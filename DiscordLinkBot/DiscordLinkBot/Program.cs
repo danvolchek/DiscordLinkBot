@@ -44,7 +44,7 @@ namespace DiscordLinkBot
         }
 
         /// <summary>
-        ///     Main task. Sets up the DB, commands, and then connects to discord.
+        ///     Main task. Sets up the DB, commands, and then connects to Discord.
         /// </summary>
         private async Task MainAsync(string[] args)
         {
