@@ -5,7 +5,7 @@ using DSharpPlus.Entities;
 namespace DiscordLinkBot.Commands
 {
     /// <summary>
-    /// Command to redefine existing commands.
+    ///     Command to redefine existing commands.
     /// </summary>
     internal class RedefineCommand : DatabaseCommand
     {

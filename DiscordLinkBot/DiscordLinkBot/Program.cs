@@ -18,7 +18,7 @@ namespace DiscordLinkBot
         private DiscordClient discord;
 
         /// <summary>
-        /// Get the <see cref="ICommand.HelpText"/> for a given command name that this manager manages.
+        ///     Get the <see cref="ICommand.HelpText" /> for a given command name that this manager manages.
         /// </summary>
         public string GetCommandHelpString(string name)
         {
@@ -27,7 +27,7 @@ namespace DiscordLinkBot
         }
 
         /// <summary>
-        /// Get all command names that this manager manages.
+        ///     Get all command names that this manager manages.
         /// </summary>
         public IEnumerable<string> GetCommandNames()
         {
@@ -35,7 +35,7 @@ namespace DiscordLinkBot
         }
 
         /// <summary>
-        /// Program entry point. Starts the <see cref="MainAsync"/> task.
+        ///     Program entry point. Starts the <see cref="MainAsync" /> task.
         /// </summary>
         /// <param name="args"></param>
         private static void Main(string[] args)
@@ -44,7 +44,7 @@ namespace DiscordLinkBot
         }
 
         /// <summary>
-        /// Main task. Sets up the DB, commands, and then connects to discord.
+        ///     Main task. Sets up the DB, commands, and then connects to discord.
         /// </summary>
         private async Task MainAsync(string[] args)
         {
@@ -101,7 +101,7 @@ namespace DiscordLinkBot
         }
 
         /// <summary>
-        /// Event handler for new messages. Handles the message using a <see cref="ICommand"/>.
+        ///     Event handler for new messages. Handles the message using a <see cref="ICommand" />.
         /// </summary>
         private async Task Discord_MessageCreated(MessageCreateEventArgs e)
         {

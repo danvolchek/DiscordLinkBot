@@ -1,11 +1,10 @@
-﻿using System.Data.SQLite;
-using System.Linq;
+﻿using System.Linq;
 using DSharpPlus.Entities;
 
 namespace DiscordLinkBot.Commands
 {
     /// <summary>
-    /// Command to get help about other commands.
+    ///     Command to get help about other commands.
     /// </summary>
     internal class HelpCommand : BaseCommand
     {
@@ -32,7 +31,8 @@ namespace DiscordLinkBot.Commands
                     return
                         $"Available commands:\n{string.Join(", ", this.manager.GetCommandNames())}\nUse `{Program.CommandChar}{this.Name} <name>` to see more info!";
                 case 1:
-                    return this.manager.GetCommandHelpString(args[0].ToLowerInvariant()) ?? "That command name doesn't exist!";
+                    return this.manager.GetCommandHelpString(args[0].ToLowerInvariant()) ??
+                           "That command name doesn't exist!";
                 default:
                     return $"Invalid args. See `{Program.CommandChar}help {this.Name} for usage`.";
             }

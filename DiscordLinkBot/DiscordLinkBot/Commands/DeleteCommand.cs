@@ -5,7 +5,7 @@ using DSharpPlus.Entities;
 namespace DiscordLinkBot.Commands
 {
     /// <summary>
-    /// Command to delete existing commands.
+    ///     Command to delete existing commands.
     /// </summary>
     internal class DeleteCommand : DatabaseCommand
     {

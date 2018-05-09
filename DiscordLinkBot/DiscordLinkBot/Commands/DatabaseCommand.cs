@@ -1,10 +1,9 @@
 ﻿using System.Data.SQLite;
-using DSharpPlus.Entities;
 
 namespace DiscordLinkBot.Commands
 {
     /// <summary>
-    /// Command which requires a database connection.
+    ///     Command which requires a database connection.
     /// </summary>
     internal abstract class DatabaseCommand : BaseCommand
     {

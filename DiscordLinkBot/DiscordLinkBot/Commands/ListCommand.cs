@@ -5,7 +5,7 @@ using DSharpPlus.Entities;
 namespace DiscordLinkBot.Commands
 {
     /// <summary>
-    /// Command to list all commands.
+    ///     Command to list all commands.
     /// </summary>
     internal class ListCommand : DatabaseCommand
     {

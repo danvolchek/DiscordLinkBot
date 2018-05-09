@@ -4,7 +4,7 @@ using DSharpPlus.Entities;
 namespace DiscordLinkBot.Commands
 {
     /// <summary>
-    /// Command to reply with a previously added message.
+    ///     Command to reply with a previously added message.
     /// </summary>
     internal class LookupCommand : DatabaseCommand
     {
@@ -44,9 +44,6 @@ namespace DiscordLinkBot.Commands
             }
         }
 
-        /// <summary>
-        /// Handles lookup commands.
-        /// </summary>
         public override string Handle(DiscordMessage message)
         {
             string mention = message.MentionedUsers.Count > 0 ? $"{message.MentionedUsers[0].Mention}" : "";

@@ -3,7 +3,7 @@
 namespace DiscordLinkBot.Commands
 {
     /// <summary>
-    /// Base command.
+    ///     Base command.
     /// </summary>
     internal abstract class BaseCommand : ICommand
     {
