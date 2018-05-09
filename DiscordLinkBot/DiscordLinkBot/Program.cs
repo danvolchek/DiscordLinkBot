@@ -74,7 +74,7 @@ namespace DiscordLinkBot
                 new DefineCommand(this.connection, this),
                 new RedefineCommand(this.connection),
                 new DeleteCommand(this.connection),
-                new ListAllCommand(this.connection),
+                new ListCommand(this.connection),
                 new HelpCommand(this),
                 new LookupCommand(this.connection)
             };

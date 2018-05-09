@@ -7,9 +7,9 @@ namespace DiscordLinkBot.Commands
     /// <summary>
     /// Command to list all commands.
     /// </summary>
-    internal class ListAllCommand : DatabaseCommand
+    internal class ListCommand : DatabaseCommand
     {
-        public ListAllCommand(SQLiteConnection connection) : base(connection)
+        public ListCommand(SQLiteConnection connection) : base(connection)
         {
         }
 
